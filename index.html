@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Ticket Management Dashboard
+    </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet"
+          href="./css/style.css">
+
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div>
+
+            <h2 class="sidebar-logo">
+
+                🎫 Ticket Desk
+
+            </h2>
+
+            <nav>
+
+                <a
+                    id="allTicketsBtn"
+                    href="javascript:void(0)"
+                    class="sidebar-link active-link">
+
+                    Dashboard
+
+                </a>
+
+                <a
+                    id="openTicketsBtn"
+                    href="javascript:void(0)"
+                    class="sidebar-link">
+
+                    Open Tickets
+
+                </a>
+
+                <a
+                    id="progressTicketsBtn"
+                    href="javascript:void(0)"
+                    class="sidebar-link">
+
+                    In Progress
+
+                </a>
+
+                <a
+                    id="closedTicketsBtn"
+                    href="javascript:void(0)"
+                    class="sidebar-link">
+
+                    Closed Tickets
+
+                </a>
+
+            </nav>
+
+        </div>
+
+        <button
+            id="addTicketBtn"
+            class="sidebar-btn">
+
+            + Create Ticket
+
+        </button>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <main class="main-content">
+
+        <!-- Top Toolbar -->
+
+        <div class="top-bar">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search by ID, Subject or Assignee"
+                class="top-input">
+
+            <select
+                id="statusFilter"
+                class="top-select">
+
+                <option value="">
+                    All Status
+                </option>
+
+                <option>
+                    Open
+                </option>
+
+                <option>
+                    In Progress
+                </option>
+
+                <option>
+                    Closed
+                </option>
+
+            </select>
+
+            <select
+                id="priorityFilter"
+                class="top-select">
+
+                <option value="">
+                    All Priority
+                </option>
+
+                <option>
+                    Low
+                </option>
+
+                <option>
+                    Medium
+                </option>
+
+                <option>
+                    High
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- Statistics -->
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <h4>
+                    Total Tickets
+                </h4>
+
+                <p id="totalTickets">
+                    0
+                </p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <h4>
+                    Open
+                </h4>
+
+                <p
+                    id="openTickets"
+                    class="text-red-500">
+
+                    0
+
+                </p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <h4>
+                    In Progress
+                </h4>
+
+                <p
+                    id="progressTickets"
+                    class="text-yellow-500">
+
+                    0
+
+                </p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <h4>
+                    Closed
+                </h4>
+
+                <p
+                    id="closedTickets"
+                    class="text-green-500">
+
+                    0
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- Tickets Container -->
+
+        <div
+            id="ticketContainer"
+            class="ticket-container">
+
+        </div>
+
+    </main>
+
+</div>
+
+<!-- Create/Edit Ticket Modal -->
+
+<div
+    id="ticketModal"
+    class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+
+    <div
+        class="bg-white w-full max-w-lg rounded-xl p-6">
+
+        <h2
+            id="modalTitle"
+            class="text-2xl font-bold mb-4">
+
+            Create Ticket
+
+        </h2>
+
+        <form id="ticketForm">
+
+            <input
+                type="hidden"
+                id="ticketId">
+
+            <input
+                id="subject"
+                class="w-full border p-3 rounded mb-3"
+                placeholder="Subject">
+
+            <textarea
+                id="description"
+                class="w-full border p-3 rounded mb-3"
+                placeholder="Description"></textarea>
+
+            <input
+                id="assignee"
+                class="w-full border p-3 rounded mb-3"
+                placeholder="Assignee">
+
+            <input
+                type="date"
+                id="dueDate"
+                class="w-full border p-3 rounded mb-3">
+
+            <select
+                id="status"
+                class="w-full border p-3 rounded mb-3">
+
+                <option>
+                    Open
+                </option>
+
+                <option>
+                    In Progress
+                </option>
+
+                <option>
+                    Closed
+                </option>
+
+            </select>
+
+            <select
+                id="priority"
+                class="w-full border p-3 rounded mb-4">
+
+                <option>
+                    Low
+                </option>
+
+                <option>
+                    Medium
+                </option>
+
+                <option>
+                    High
+                </option>
+
+            </select>
+
+            <div class="flex justify-end gap-3">
+
+                <button
+                    type="button"
+                    id="closeModal"
+                    class="bg-gray-500 text-white px-4 py-2 rounded">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="bg-blue-600 text-white px-4 py-2 rounded">
+
+                    Save
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- View Modal -->
+
+<div
+    id="viewModal"
+    class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+
+    <div
+        class="bg-white w-full max-w-xl rounded-xl p-6">
+
+        <div
+            class="flex justify-between items-center mb-4">
+
+            <h2 class="text-2xl font-bold">
+
+                Ticket Details
+
+            </h2>
+
+            <button
+                onclick="closeViewModal()"
+                class="text-red-500 text-xl font-bold">
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <div
+            id="viewTicketContent">
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Toast -->
+
+<div
+    id="toast"
+    class="hidden">
+
+</div>
+
+<script src="./js/storage.js"></script>
+<script src="./js/validation.js"></script>
+<script src="./js/ui.js"></script>
+<script src="./js/app.js"></script>
+
+</body>
+
+</html>
