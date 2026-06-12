@@ -10,6 +10,8 @@ import ProductsPage from "./pages/ProductsPage";
 import AddProductPage from "./pages/AddProductPage";
 import EditProductPage from "./pages/EditProductPage";
 
+
+// this is app
 function App() {
   return (
     <BrowserRouter>
